@@ -16,20 +16,32 @@ function checkResponse(err, res) {
 export const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => checkResponse(err, res));
+    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
 
 export const getUserById = (req, res) => {
   User.findById(req.params.userId)
     .orFail(new Error404("Пользователь по указанному id не найден"))
     .then((user) => res.send(user))
-    .catch((err) => checkResponse(err, res));
+    .catch((err) => {
+      if (err instanceof Error404) {
+        return res.status(err.status).send({ message: err.message });
+      }
+      res.status(500).send({ message: "Произошла ошибка" });
+    });
 };
 
 export const createUser = (req, res) => {
   User.create(req.body)
     .then((user) => res.send(user))
-    .catch((err) => checkResponse(err, res));
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return res.status(400).send({
+          message: "Переданы некорректные данные",
+        });
+      }
+      res.status(500).send({ message: "Произошла ошибка" });
+    });
 };
 
 export const userUpdateProfile = (req, res) => {
