@@ -40,12 +40,12 @@ export const createUser = (req, res) => {
 
 export const userUpdateProfile = (req, res) => {
   const { name, about } = req.body;
-  if (name.length < 2 || about.length < 2) {
+  if (name?.length < 2 || about?.length < 2) {
     return res
       .status(400)
       .send({ message: "поле должно содержать минимум 2 символа" });
   }
-  if (name.length > 30 || about.length > 30) {
+  if (name?.length > 30 || about?.length > 30) {
     return res
       .status(400)
       .send({ message: "поле должно содержать максимум 30 символов" });
@@ -54,6 +54,9 @@ export const userUpdateProfile = (req, res) => {
     .orFail(new Error("NotFound"))
     .then((user) => res.send(user))
     .catch((err) => {
+      if (err instanceof SyntaxError) {
+        return res.send("lol");
+      }
       if (err.message === "NotFound") {
         return res
           .status(404)
