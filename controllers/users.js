@@ -39,7 +39,18 @@ export const createUser = (req, res) => {
 };
 
 export const userUpdateProfile = (req, res) => {
-  User.findByIdAndUpdate(req.user._id, req.body, { new: true })
+  const { name, about } = req.body;
+  if (name.length < 2 || about.length < 2) {
+    return res
+      .status(400)
+      .send({ message: "поле должно содержать минимум 2 символа" });
+  }
+  if (name.length > 30 || about.length > 30) {
+    return res
+      .status(400)
+      .send({ message: "поле должно содержать максимум 30 символов" });
+  }
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
     .orFail(new Error("NotFound"))
     .then((user) => res.send(user))
     .catch((err) => {
@@ -58,7 +69,18 @@ export const userUpdateProfile = (req, res) => {
 };
 
 export const userUpdateAvatar = (req, res) => {
-  User.findByIdAndUpdate(req.user._id, req.body, { new: true })
+  const { avatar } = req.body;
+  if (avatar.length < 2) {
+    return res
+      .status(400)
+      .send({ message: "поле должно содержать минимум 2 символа" });
+  }
+  if (avatar.length > 30) {
+    return res
+      .status(400)
+      .send({ message: "поле должно содержать максимум 30 символов" });
+  }
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .orFail(new Error("NotFound"))
     .then((user) => res.status(200).send(user))
     .catch((err) => {

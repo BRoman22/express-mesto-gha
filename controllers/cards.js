@@ -28,6 +28,11 @@ export const deleteCard = (req, res) => {
     .orFail(new Error("NotFound"))
     .then(() => res.status(200).send({ message: "Пост удалён" }))
     .catch((err) => {
+      if (err instanceof ValidationError) {
+        return res.status(400).send({
+          message: "Переданы некорректные данные при eдалении карточки",
+        });
+      }
       if (err.message === "NotFound") {
         return res
           .status(404)
