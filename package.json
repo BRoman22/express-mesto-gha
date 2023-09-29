@@ -6,22 +6,23 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon --inspect -- app.js",
-    "lint": "npm run lint",
+    "dev": "nodemon --es-module-specifier-resolution=node --inspect -- app.js",
+    "lint": "npx eslint .",
     "db-start": "brew services start mongodb-community@4.4",
     "db-stop": "brew services stop mongodb-community@4.4"
   },
   "keywords": [],
-  "author": "",
+  "author": "Roman Bondarev",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.2.0",
-    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.2",
+    "prettier": "^1.19.1",
+    "prettier-airbnb-config": "^1.0.0",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^7.5.2"
   }
