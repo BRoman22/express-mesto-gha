@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import User from '../models/user';
 import {
   BAD_REQUEST,
@@ -12,9 +13,8 @@ const { ValidationError, CastError } = mongoose.Error;
 export const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() =>
-      res.status(INTERNAL_SERVER_ERROR).send({ message: 'Произошла ошибка' }),
-    );
+    .catch(() => res.status(INTERNAL_SERVER_ERROR)
+      .send({ message: 'Произошла ошибка' }));
 };
 
 export const getUserById = (req, res) => {
@@ -39,21 +39,24 @@ export const getUserById = (req, res) => {
 };
 
 export const createUser = (req, res) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
 
   bcrypt
     .hash(password, 10)
-    .then((hash) =>
-      User.create({
-        name: name || 'Жак-Ив Кусто',
-        about: about || 'Исследователь',
-        avatar:
-          avatar ||
-          'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-        email,
-        password: hash,
-      }),
-    )
+    .then((hash) => User.create({
+      name: name || 'Жак-Ив Кусто',
+      about: about || 'Исследователь',
+      avatar: avatar
+      || 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+      email,
+      password: hash,
+    }))
     .then((user) => {
       res.status(201).send({
         name: user.name,
@@ -127,13 +130,11 @@ export const login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
-    .then((user) =>
-      res.send({
-        token: jwt.sign({ _id: user._id }, 'super-strong-secret', {
-          expiresIn: '7d',
-        }),
+    .then((user) => res.send({
+      token: jwt.sign({ _id: user._id }, 'super-strong-secret', {
+        expiresIn: '7d',
       }),
-    )
+    }))
     .catch((err) => {
       res.status(401).send({ message: err.message });
     });

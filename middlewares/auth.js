@@ -22,9 +22,9 @@ function auth(req, res, next) {
     .verify(token, 'super-strong-secret')
     .then((decoded) => {
       req.user = decoded;
-      next();
     })
     .catch(() => handleAuthError(res));
+  return next();
 }
 
 export default auth;
