@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import {
+  getUserByIdValidation,
+  updateUserProfileValidation,
+  updateUserAvatarValidation,
+} from '../middlewares/requestValidation';
+import {
   getUsers,
+  getCurrentUserInfo,
   getUserById,
   userUpdateProfile,
   userUpdateAvatar,
@@ -9,8 +15,9 @@ import {
 const userRouter = Router();
 
 userRouter.get('/', getUsers);
-userRouter.get('/:userId', getUserById);
-userRouter.patch('/me', userUpdateProfile);
-userRouter.patch('/me/avatar', userUpdateAvatar);
+userRouter.get('/me', getCurrentUserInfo);
+userRouter.get('/:userId', getUserByIdValidation, getUserById);
+userRouter.patch('/me', updateUserProfileValidation, userUpdateProfile);
+userRouter.patch('/me/avatar', updateUserAvatarValidation, userUpdateAvatar);
 
 export default userRouter;

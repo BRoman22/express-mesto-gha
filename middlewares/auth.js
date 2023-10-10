@@ -1,30 +1,24 @@
 import jwt from 'jsonwebtoken';
-import { UNAUTHORIZED } from '../utils/statusCodes';
+import Unauthorized from '../errors/Unauthorized';
 
-function handleAuthError(res) {
-  return res.status(UNAUTHORIZED).send({ message: 'Необходима авторизация' });
-}
-
-function extractBearerToken(header) {
-  return header.replace('Bearer ', '');
-}
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 function auth(req, res, next) {
-  const { authorization } = req.headers;
+  const authorization = req.cookies.jwtKey;
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    return handleAuthError(res);
+  if (!authorization) {
+    return next(new Unauthorized('Необходима авторизация'));
   }
 
-  const token = extractBearerToken(authorization);
+  const token = authorization.replace('Bearer ', '');
 
   jwt
-    .verify(token, 'super-strong-secret')
+    .verify(token, NODE_ENV ? JWT_SECRET : 'super-strong-secret')
     .then((decoded) => {
       req.user = decoded;
     })
-    .catch(() => handleAuthError(res));
-  return next();
+    .catch(next(new Unauthorized('Необходима авторизация')));
+  return next;
 }
 
 export default auth;

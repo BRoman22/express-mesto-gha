@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { isURL } from 'validator';
 
 const cardSchema = new mongoose.Schema(
   {
@@ -11,16 +12,21 @@ const cardSchema = new mongoose.Schema(
     link: {
       type: String,
       required: { value: true, message: 'Поле является обязательным' },
+      validate: {
+        validator: (v) => isURL(v),
+        message: 'Некорректный URL',
+      },
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
-      required: { value: true, message: 'Поле является обязательным' },
+      required: true,
     },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
+        default: [],
       },
     ],
     createdAt: {

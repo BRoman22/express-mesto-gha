@@ -1,8 +1,11 @@
 import express, { json } from 'express';
 import mongoose from 'mongoose';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import { errors } from 'celebrate';
+import limiter from './middlewares/rateLimiter';
+import errorHandler from './middlewares/errorHandler';
 import routes from './routes/index';
-import { login, createUser } from './controllers/users';
-import auth from './middlewares/auth';
 
 const {
   PORT = 3000,
@@ -11,22 +14,13 @@ const {
 
 const app = express();
 
+app.use(helmet());
 app.use(json());
-
-/*
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6511852e414b3637f848e584',
-  };
-  next();
-});
-*/
-
-app.post('/signin', login);
-app.post('/signup', createUser);
-
-app.use(auth);
+app.use(cookieParser());
 app.use('/', routes);
+app.use(errors());
+app.use(limiter);
+app.use(errorHandler);
 
 mongoose
   .connect(MONGO_URL)
@@ -36,4 +30,4 @@ mongoose
     app.listen(PORT);
     console.log(`App listening on port ${PORT}`);
   })
-  .catch(() => console.log('Mongo dont connect'));
+  .catch(() => console.log('Mongo don`t connect'));
