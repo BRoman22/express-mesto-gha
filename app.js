@@ -1,5 +1,6 @@
 import express, { json } from 'express';
 import mongoose from 'mongoose';
+import 'dotenv/config';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';

@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import {
-  loginValidation,
   createUserValidation,
+  loginValidation,
 } from '../middlewares/requestValidation';
-import { login, createUser } from '../controllers/users';
+import { createUser, login } from '../controllers/users';
 
 const noAuthRouter = Router();
 
-noAuthRouter.post('/signin', loginValidation, login);
 noAuthRouter.post('/signup', createUserValidation, createUser);
+noAuthRouter.post('/signin', loginValidation, login);
 
 export default noAuthRouter;
