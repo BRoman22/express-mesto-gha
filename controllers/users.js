@@ -50,7 +50,7 @@ export const userUpdateAvatar = (req, res, next) => {
 export const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
@@ -60,8 +60,10 @@ export const login = (req, res, next) => {
       res.cookie('jwtKey', token, {
         httpOnly: true,
         sameSite: true,
+        secure: true,
         maxAge: 3600000 * 24 * 7,
       });
+      return res.send({ token });
     })
     .catch(next);
 };
