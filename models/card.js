@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-import { isURL } from 'validator';
+import validator from 'validator';
+
+const { isURL } = validator;
 
 const cardSchema = new mongoose.Schema(
   {
