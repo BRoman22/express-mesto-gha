@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { isEmail, isURL } from 'validator';
+import validator from 'validator';
 import Unauthorized from '../errors/Unauthorized';
+
+const { isEmail, isURL } = validator;
 
 const userSchema = new mongoose.Schema(
   {
