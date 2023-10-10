@@ -12,13 +12,13 @@ function auth(req, res, next) {
 
   const token = authorization.replace('Bearer ', '');
 
-  jwt
+  return jwt
     .verify(token, NODE_ENV ? JWT_SECRET : 'super-strong-secret')
     .then((decoded) => {
       req.user = decoded;
+      next();
     })
     .catch(next(new Unauthorized('Необходима авторизация')));
-  return next;
 }
 
 export default auth;
