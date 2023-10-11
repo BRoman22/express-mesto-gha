@@ -9,8 +9,8 @@ const routes = Router();
 
 routes.use('/', authRouter);
 routes.use(auth);
-routes.use('/', userRouter);
-routes.use('/', cardRouter);
+routes.use('/users', userRouter);
+routes.use('/cards', cardRouter);
 routes.use('*', (req, res, next) => next(new NotFound('Такой ресурс еще не создан')));
 
 export default routes;

@@ -5,20 +5,21 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
   let payload;
-  try {
-    const { authorization } = req.headers;
-    const { cookies } = req;
-    if ((authorization && authorization.startsWith('Bearer ')) || (cookies && cookies.jwtKey)) {
-      const token = authorization ? authorization.replace('Bearer ', '') : cookies.jwtKey;
-      payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret');
+  const { authorization } = req.headers;
+  const { cookies } = req;
+  const token = authorization
+    ? authorization.replace('Bearer ', '')
+    : cookies.jwtKey;
+  const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
+
+  jwt
+    .verify(token, secret)
+    .then((item) => {
+      payload = item;
       req.user = payload;
       next();
-    } else {
-      next(new Unauthorized('Необходима авторизация'));
-    }
-  } catch (error) {
-    next(new Unauthorized('Необходима авторизация'));
-  }
+    })
+    .catch(() => next(new Unauthorized('Необходима авторизация')));
 };
 
 export default auth;
