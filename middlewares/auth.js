@@ -7,19 +7,19 @@ const auth = (req, res, next) => {
   let payload;
   const { authorization } = req.headers;
   const { cookies } = req;
-  const token = authorization
-    ? authorization.replace('Bearer ', '')
-    : cookies.jwtKey;
-  const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
 
-  jwt
-    .verify(token, secret)
-    .then((item) => {
+  if ((authorization && authorization.startsWith('Bearer ')) || (cookies && cookies.jwtKey)) {
+    const token = authorization ? authorization.replace('Bearer ', '') : cookies.jwtKey;
+    const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
+
+    jwt.verify(token, secret).then((item) => {
       payload = item;
       req.user = payload;
       next();
-    })
-    .catch(() => next(new Unauthorized('Необходима авторизация')));
+    }).catch(() => next(new Unauthorized('Необходима авторизация')));
+  } else {
+    next(new Unauthorized('Необходима авторизация'));
+  }
 };
 
 export default auth;
