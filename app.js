@@ -18,9 +18,9 @@ const app = express();
 app.use(helmet());
 app.use(json());
 app.use(cookieParser());
+app.use(limiter);
 app.use('/', routes);
 app.use(errors());
-app.use(limiter);
 app.use(errorHandler);
 
 mongoose
@@ -31,4 +31,4 @@ mongoose
     app.listen(PORT);
     console.log(`App listening on port ${PORT}`);
   })
-  .catch(() => console.log('Mongo dont connect'));
+  .catch(() => console.log('Mongo don`t connect'));

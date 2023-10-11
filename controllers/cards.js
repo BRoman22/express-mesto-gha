@@ -1,7 +1,6 @@
 import Card from '../models/card';
 import Forbidden from '../errors/Forbidden';
 import NotFound from '../errors/NotFound';
-// return Card.findByIdAndRemove(req.params.cardId)
 
 export const getCards = (req, res, next) => {
   Card.find({})
@@ -25,7 +24,7 @@ export const deleteCard = (req, res, next) => {
       if (card.owner.valueOf() !== req.user._id) {
         return next(new Forbidden('Нет прав доступа'));
       }
-      Card.findByIdAndRemove(req.params.cardId)
+      Card.deleteOne(card)
         .then((item) => res.send(item))
         .catch(next);
       return next;
@@ -43,7 +42,7 @@ export const cardLike = (req, res, next) => {
       if (!card) {
         return next(new NotFound('Карточка с указанным _id не найдена'));
       }
-      return res.status(201).send(card);
+      return res.send(card);
     })
     .catch(next);
 };

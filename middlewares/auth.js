@@ -8,20 +8,20 @@ export default function auth(req, res, next) {
   const { jwtKey } = req.cookies;
   const { authorization } = req.headers;
 
-  if (!jwtKey && !authorization) {
+  if (jwtKey || authorization.startsWith('Bearer ')) {
+    const token = jwtKey || authorization.replace('Bearer ', '');
+    const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
+    let payload;
+
+    try {
+      payload = jwt.verify(token, secret);
+    } catch (err) {
+      return next(new Unauthorized('Необходима авторизация'));
+    }
+
+    req.user = { _id: payload._id };
+    next();
+  } else {
     return next(new Unauthorized('Необходима авторизация'));
   }
-
-  const token = jwtKey || authorization.replace('Bearer ', '');
-  const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
-  let payload;
-
-  try {
-    payload = jwt.verify(token, secret);
-  } catch (err) {
-    return next(new Unauthorized('Необходима авторизация'));
-  }
-
-  req.user = { _id: payload._id };
-  next();
 }
