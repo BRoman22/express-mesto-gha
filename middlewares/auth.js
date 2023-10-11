@@ -8,7 +8,7 @@ export default function auth(req, res, next) {
   const { jwtKey } = req.cookies;
   const { authorization } = req.headers;
 
-  if (jwtKey || authorization.startsWith('Bearer ')) {
+  if (jwtKey || (authorization && authorization.startsWith('Bearer '))) {
     const token = jwtKey || authorization.replace('Bearer ', '');
     const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
     let payload;
