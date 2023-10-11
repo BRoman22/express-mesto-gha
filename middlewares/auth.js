@@ -3,7 +3,8 @@ import Unauthorized from '../errors/Unauthorized';
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const auth = (req, res, next) => {
+// eslint-disable-next-line consistent-return
+export default function auth(req, res, next) {
   const { jwtKey } = req.cookies;
 
   if (!jwtKey && !jwtKey.startsWith('Bearer ')) {
@@ -21,7 +22,5 @@ const auth = (req, res, next) => {
   }
 
   req.user = { _id: payload._id };
-  return next();
-};
-
-export default auth;
+  next();
+}
