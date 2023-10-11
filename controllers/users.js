@@ -39,7 +39,8 @@ export const userUpdateProfile = (req, res, next) => {
 };
 
 export const userUpdateAvatar = (req, res, next) => {
-  User.findByIdAndUpdate(req.user._id, req.body, {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(req.user._id, avatar, {
     new: true,
     runValidators: true,
   })
