@@ -28,4 +28,4 @@ mongoose
     app.listen(PORT);
     console.log(`App listening on port ${PORT}`);
   })
-  .catch(() => console.log('Mongo don`t connect'));
+  .catch(() => console.log('Mongo dont connect'));
