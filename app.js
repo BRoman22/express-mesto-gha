@@ -8,10 +8,7 @@ import limiter from './middlewares/rateLimiter';
 import errorHandler from './middlewares/errorHandler';
 import routes from './routes/index';
 
-const {
-  PORT = 3000,
-  MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb',
-} = process.env;
+const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 

@@ -1,16 +1,16 @@
 import { Router } from 'express';
 import userRouter from './users';
 import cardRouter from './cards';
-import noAuth from './noAuth';
+import authRouter from './auth';
 import auth from '../middlewares/auth';
 import NotFound from '../errors/NotFound';
 
 const routes = Router();
 
-routes.use('/', noAuth);
+routes.use('/', authRouter);
 routes.use(auth);
-routes.use('/users', userRouter);
-routes.use('/cards', cardRouter);
+routes.use('/', userRouter);
+routes.use('/', cardRouter);
 routes.use('*', (req, res, next) => next(new NotFound('Такой ресурс еще не создан')));
 
 export default routes;

@@ -5,9 +5,9 @@ import {
 } from '../middlewares/requestValidation';
 import { createUser, login } from '../controllers/users';
 
-const noAuthRouter = Router();
+const authRouter = Router();
 
-noAuthRouter.post('/signup', createUserValidation, createUser);
-noAuthRouter.post('/signin', loginValidation, login);
+authRouter.post('/signup', createUserValidation, createUser);
+authRouter.post('/signin', loginValidation, login);
 
-export default noAuthRouter;
+export default authRouter;

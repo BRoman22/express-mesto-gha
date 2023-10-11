@@ -3,22 +3,24 @@ import Unauthorized from '../errors/Unauthorized';
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-function auth(req, res, next) {
+const auth = (req, res, next) => {
   const authorization = req.cookies.jwtKey;
-
   if (!authorization) {
     return next(new Unauthorized('Необходима авторизация'));
   }
 
   const token = authorization.replace('Bearer ', '');
+  let payload;
 
-  return jwt
-    .verify(token, NODE_ENV ? JWT_SECRET : 'super-strong-secret')
-    .then((decoded) => {
-      req.user = decoded;
-      next();
-    })
-    .catch(next(new Unauthorized('Необходима авторизация')));
-}
+  try {
+    payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'super-strong-secret');
+  } catch (err) {
+    return next(new Unauthorized('Необходима авторизация'));
+  }
+
+  req.user = payload;
+
+  next();
+};
 
 export default auth;
