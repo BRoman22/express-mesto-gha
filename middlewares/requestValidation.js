@@ -1,6 +1,9 @@
 import { celebrate, Joi } from 'celebrate';
+import validator from 'validator';
 
-const httpRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
+function urlValidator(value) {
+  return validator.isURL(value) ? value : null;
+}
 
 export const getUserByIdValidation = celebrate({
   params: Joi.object().keys({
@@ -28,7 +31,7 @@ export const updateUserAvatarValidation = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string()
       .required()
-      .pattern(httpRegex),
+      .custom(urlValidator),
   }),
 });
 
@@ -53,7 +56,7 @@ export const createUserValidation = celebrate({
     about: Joi.string()
       .min(2)
       .max(30),
-    avatar: Joi.string().pattern(httpRegex),
+    avatar: Joi.string().custom(urlValidator),
   }),
 });
 
@@ -65,7 +68,7 @@ export const createCardValidation = celebrate({
       .max(30),
     link: Joi.string()
       .required()
-      .pattern(httpRegex),
+      .custom(urlValidator),
   }),
 });
 
