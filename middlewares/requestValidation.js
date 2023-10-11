@@ -28,7 +28,7 @@ export const updateUserAvatarValidation = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string()
       .required()
-      .custom(httpRegex),
+      .pattern(httpRegex),
   }),
 });
 
@@ -53,7 +53,7 @@ export const createUserValidation = celebrate({
     about: Joi.string()
       .min(2)
       .max(30),
-    avatar: Joi.string().custom(httpRegex),
+    avatar: Joi.string().pattern(httpRegex),
   }),
 });
 
@@ -65,7 +65,7 @@ export const createCardValidation = celebrate({
       .max(30),
     link: Joi.string()
       .required()
-      .custom(httpRegex),
+      .pattern(httpRegex),
   }),
 });
 
