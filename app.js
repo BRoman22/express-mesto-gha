@@ -8,7 +8,10 @@ import limiter from './middlewares/rateLimiter';
 import errorHandler from './middlewares/errorHandler';
 import routes from './routes/index';
 
-const { PORT, MONGO_URL } = process.env;
+const {
+  PORT = 3000,
+  MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb',
+} = process.env;
 
 const app = express();
 
@@ -28,4 +31,4 @@ mongoose
     app.listen(PORT);
     console.log(`App listening on port ${PORT}`);
   })
-  .catch(() => console.log('Mongo dont connect'));
+  .catch(() => console.log('Mongo don`t connect'));
