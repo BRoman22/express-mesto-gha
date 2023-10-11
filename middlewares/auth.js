@@ -8,7 +8,7 @@ export default function auth(req, res, next) {
   const { jwtKey } = req.cookies;
   const { authorization } = req.headers;
 
-  if ((!jwtKey) && (!authorization && !authorization.startsWith('Bearer '))) {
+  if (!jwtKey && !authorization) {
     return next(new Unauthorized('Необходима авторизация'));
   }
 
