@@ -7,9 +7,9 @@ import NotFound from '../errors/NotFound';
 
 const routes = Router();
 
-routes.use(authRouter);
-routes.use(auth, userRouter);
-routes.use(auth, cardRouter);
+routes.use('/', authRouter);
+routes.use('/', auth, userRouter);
+routes.use('/', auth, cardRouter);
 routes.use('*', (req, res, next) => {
   next(new NotFound('Такой ресурс еще не создан'));
 });
