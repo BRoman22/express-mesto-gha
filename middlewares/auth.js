@@ -22,7 +22,7 @@ const auth = (req, res, next) => {
 
   req.user = { _id: payload._id };
 
-  next();
+  return next();
 };
 
 export default auth;
