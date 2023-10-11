@@ -4,13 +4,13 @@ import Unauthorized from '../errors/Unauthorized';
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
-  const authorization = req.cookies.jwtKey;
+  const { jwtKey } = req.cookies;
 
-  if (!authorization) {
+  if (!jwtKey && !jwtKey.startsWith('Bearer ')) {
     return next(new Unauthorized('Необходима авторизация'));
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = jwtKey.replace('Bearer ', '');
   const secret = NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret';
   let payload;
 
@@ -21,7 +21,6 @@ const auth = (req, res, next) => {
   }
 
   req.user = { _id: payload._id };
-
   return next();
 };
 

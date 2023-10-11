@@ -3,5 +3,5 @@ export default function errorHandler(err, req, res, next) {
   res.status(statusCode).send({
     message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
   });
-  return next;
+  next();
 }
