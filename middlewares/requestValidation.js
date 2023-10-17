@@ -43,10 +43,6 @@ export const loginValidation = celebrate({
 
 export const createUserValidation = celebrate({
   body: Joi.object().keys({
-    email: Joi.string()
-      .required()
-      .email(),
-    password: Joi.string().required(),
     name: Joi.string()
       .min(2)
       .max(30),
@@ -54,6 +50,10 @@ export const createUserValidation = celebrate({
       .min(2)
       .max(30),
     avatar: Joi.string().pattern(httpRegex),
+    email: Joi.string()
+      .required()
+      .email(),
+    password: Joi.string().required(),
   }),
 });
 
