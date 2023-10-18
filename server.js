@@ -1,6 +1,5 @@
-import app from './app';
-// eslint-disable-next-line import/order
 import mongoose from 'mongoose';
+import app from './app';
 
 const {
   PORT = 3000,
